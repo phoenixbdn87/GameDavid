@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Form, Button, Card } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -21,13 +21,7 @@ function GameForm() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  useEffect(() => {
-    if (id) {
-      fetchGame();
-    }
-  }, [id]);
-
-  const fetchGame = async () => {
+  const fetchGame = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:5000/api/games/${id}`);
       const gameData = {
@@ -38,7 +32,13 @@ function GameForm() {
     } catch (error) {
       console.error('Error fetching game:', error);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      fetchGame();
+    }
+  }, [id, fetchGame]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

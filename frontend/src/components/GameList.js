@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Row, Col, Button, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -8,24 +8,7 @@ function GameList({ searchTerm, platformFilter }) {
   const [filteredGames, setFilteredGames] = useState([]);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' o 'list'
 
-  useEffect(() => {
-    fetchGames();
-  }, []);
-
-  useEffect(() => {
-    filterGames();
-  }, [searchTerm, platformFilter, games, filterGames]);
-
-  const fetchGames = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/games');
-      setGames(response.data);
-    } catch (error) {
-      console.error('Error fetching games:', error);
-    }
-  };
-
-  const filterGames = () => {
+  const filterGames = useCallback(() => {
     let filtered = games;
 
     // Filtrar por término de búsqueda
@@ -52,7 +35,24 @@ function GameList({ searchTerm, platformFilter }) {
     filtered.sort((a, b) => a.name.localeCompare(b.name));
 
     setFilteredGames(filtered);
+  }, [games, searchTerm, platformFilter]);
+
+  useEffect(() => {
+    filterGames();
+  }, [filterGames]);
+
+  const fetchGames = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/games');
+      setGames(response.data);
+    } catch (error) {
+      console.error('Error fetching games:', error);
+    }
   };
+
+  useEffect(() => {
+    fetchGames();
+  }, []);
 
   const handleDelete = async (id) => {
     try {
