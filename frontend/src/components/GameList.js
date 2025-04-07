@@ -14,7 +14,7 @@ function GameList({ searchTerm, platformFilter }) {
 
   useEffect(() => {
     filterGames();
-  }, [searchTerm, platformFilter, games]);
+  }, [searchTerm, platformFilter, games, filterGames]);
 
   const fetchGames = async () => {
     try {
