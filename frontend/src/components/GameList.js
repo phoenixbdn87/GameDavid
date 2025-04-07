@@ -43,7 +43,7 @@ function GameList({ searchTerm, platformFilter }) {
 
   const fetchGames = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/games');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/games`);
       setGames(response.data);
     } catch (error) {
       console.error('Error fetching games:', error);
@@ -56,7 +56,7 @@ function GameList({ searchTerm, platformFilter }) {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/games/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/games/${id}`);
       fetchGames();
     } catch (error) {
       console.error('Error deleting game:', error);

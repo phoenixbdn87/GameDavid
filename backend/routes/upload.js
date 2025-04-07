@@ -11,7 +11,7 @@ router.post('/', upload.single('image'), (req, res) => {
     }
 
     // Construir la URL de la imagen
-    const imageUrl = `http://localhost:5000/uploads/${req.file.filename}`;
+    const imageUrl = `http://localhost:3000/uploads/${req.file.filename}`;
     
     res.json({ imageUrl });
   } catch (error) {

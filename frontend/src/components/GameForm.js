@@ -23,7 +23,7 @@ function GameForm() {
 
   const fetchGame = useCallback(async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/games/${id}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/games/${id}`);
       const gameData = {
         ...response.data,
         platform: Array.isArray(response.data.platform) ? response.data.platform : [response.data.platform]
@@ -61,9 +61,9 @@ function GameForm() {
       };
 
       if (id) {
-        await axios.put(`http://localhost:5000/api/games/${id}`, gameData);
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/games/${id}`, gameData);
       } else {
-        await axios.post('http://localhost:5000/api/games', gameData);
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/games`, gameData);
       }
       navigate('/');
     } catch (error) {
