@@ -1,5 +1,5 @@
 body {
-  background: #ffffff;
+  background-color: #ffffff;
   min-height: 100vh;
   margin: 0;
   padding: 0;
@@ -8,75 +8,119 @@ body {
 
 .App {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .card {
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .card-title {
   color: #333;
+  font-weight: 600;
 }
 
 .card-text {
   color: #666;
 }
 
-.btn-primary {
-  background: linear-gradient(45deg, #2196F3, #1976D2);
-  border: none;
-}
-
-.btn-danger {
-  background: linear-gradient(45deg, #f44336, #d32f2f);
-  border: none;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
 .navbar {
-  background: #000000 !important;
+  background-color: #000000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.navbar .navbar-brand,
+.navbar .navbar-brand {
+  color: #ffffff;
+  font-weight: bold;
+}
+
 .navbar .nav-link {
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
 .navbar .nav-link:hover {
-  color: #cccccc !important;
+  color: #cccccc;
 }
 
-.form-control, .form-select {
-  background: #ffffff;
+.form-control {
   border: 1px solid #ced4da;
-  color: #333;
 }
 
-.form-control:focus, .form-select:focus {
-  background: #ffffff;
+.form-control:focus {
   border-color: #80bdff;
-  color: #333;
-  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
-}
-
-.form-control::placeholder {
-  color: #6c757d;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .alert {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  color: #333;
+  border: 1px solid transparent;
+}
+
+/* Estilos para la vista en lista */
+.list-group-item {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.list-group-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para los botones en modo listado */
+.list-group-item .btn-edit,
+.list-group-item .btn-delete {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 1.1rem;
+}
+
+.list-group-item .btn-edit:hover,
+.list-group-item .btn-delete:hover {
+  transform: scale(1.1);
+}
+
+/* Estilos para los botones */
+.btn-edit {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-edit:hover {
+  background-color: #45a049;
+  border-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.btn-delete {
+  background-color: #f44336;
+  border-color: #f44336;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-delete:hover {
+  background-color: #da190b;
+  border-color: #da190b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
 } 
