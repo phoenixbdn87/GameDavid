@@ -28,57 +28,46 @@ function Navbar({ onSearch, onPlatformFilter }) {
   };
 
   return (
-    <BootstrapNavbar bg="dark" variant="dark" expand="lg">
-      <Container>
-        <BootstrapNavbar.Brand as={Link} to="/">
-          <img
-            src={logo}
-            alt="GamesDavid Logo"
-            height="60"
-            className="d-inline-block align-top"
-          />
+    <BootstrapNavbar bg="primary" variant="dark" expand="lg" className="px-3">
+      <Container fluid>
+        <BootstrapNavbar.Brand as={Link} to="/" className="d-flex align-items-center">
+          <i className="bi bi-controller me-2"></i>
+          <span className="d-none d-sm-inline">Game Collection</span>
         </BootstrapNavbar.Brand>
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
-            <Form className="d-flex gap-2 align-items-center">
-              <Form.Control
-                type="search"
-                placeholder="Buscar..."
-                className="me-2"
-                aria-label="Search"
-                value={searchTerm}
-                onChange={handleSearch}
-              />
-              <Form.Select
-                value={selectedPlatform}
-                onChange={handlePlatformChange}
-                className="me-2"
-                style={{ width: '200px' }}
-              >
-                {platformOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </Form.Select>
-              <Button 
-                as={Link} 
-                to="/games/new" 
-                variant="success"
-                className="d-flex align-items-center gap-2 px-3 py-1"
-                style={{ 
-                  whiteSpace: 'nowrap', 
-                  fontSize: '0.9rem',
-                  width: '200px',
-                  justifyContent: 'center'
-                }}
-              >
-                <i className="bi bi-plus-circle"></i>
-                Añadir
-              </Button>
-            </Form>
+          <Nav className="me-auto">
+            <Nav.Link as={Link} to="/" className="d-flex align-items-center">
+              <i className="bi bi-house-door me-1"></i>
+              <span className="d-none d-sm-inline">Inicio</span>
+            </Nav.Link>
+            <Nav.Link as={Link} to="/games/new" className="d-flex align-items-center">
+              <i className="bi bi-plus-circle me-1"></i>
+              <span className="d-none d-sm-inline">Nuevo Juego</span>
+            </Nav.Link>
           </Nav>
+          <Form className="d-flex">
+            <Form.Control
+              type="search"
+              placeholder="Buscar..."
+              className="me-2"
+              value={searchTerm}
+              onChange={handleSearch}
+              style={{ minWidth: '120px' }}
+            />
+            <Form.Select
+              value={selectedPlatform}
+              onChange={handlePlatformChange}
+              style={{ minWidth: '120px' }}
+            >
+              <option value="">Todas las plataformas</option>
+              {platformOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Form.Select>
+          </Form>
         </BootstrapNavbar.Collapse>
       </Container>
     </BootstrapNavbar>

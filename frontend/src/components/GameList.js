@@ -170,14 +170,13 @@ function GameList({ searchTerm, platformFilter }) {
   };
 
   const renderGridView = () => (
-    <Row xs={1} sm={2} md={3} lg={4} className="g-4">
+    <Row xs={1} sm={2} md={3} lg={4} className="g-3">
       {getCurrentPageItems().map((game) => (
         <Col key={game._id}>
           <Card 
             className="h-100 game-card"
             onClick={(e) => {
-              // Evitar la navegación si se hace click en los botones
-              if (!e.target.closest('.btn-edit, .btn-delete')) {
+              if (!e.target.closest('.btn-delete')) {
                 navigate(`/games/${game._id}/edit`);
               }
             }}
@@ -196,17 +195,15 @@ function GameList({ searchTerm, platformFilter }) {
                 }} 
               />
             </div>
-            <Card.Body className="d-flex flex-column">
-              <Card.Title className="text-primary fw-bold">{game.name}</Card.Title>
-              <Card.Text>
-                <small className="text-muted">
-                  <i className="bi bi-controller me-1"></i>
-                  Plataformas: {formatPlatforms(game.platform)}
-                </small>
+            <Card.Body className="d-flex flex-column p-2 p-sm-3">
+              <Card.Title className="h6 text-primary fw-bold mb-1">{game.name}</Card.Title>
+              <Card.Text className="small text-muted mb-2">
+                <i className="bi bi-controller me-1"></i>
+                {formatPlatforms(game.platform)}
               </Card.Text>
               <div className="mt-auto d-flex justify-content-end">
                 <Button
-                  className="btn-delete"
+                  className="btn-delete btn-sm"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDelete(game._id);
@@ -227,16 +224,15 @@ function GameList({ searchTerm, platformFilter }) {
       {getCurrentPageItems().map((game) => (
         <ListGroup.Item 
           key={game._id} 
-          className="d-flex align-items-center game-list-item"
+          className="d-flex flex-column flex-sm-row align-items-center game-list-item p-2"
           onClick={(e) => {
-            // Evitar la navegación si se hace click en los botones
-            if (!e.target.closest('.btn-edit, .btn-delete')) {
+            if (!e.target.closest('.btn-delete')) {
               navigate(`/games/${game._id}/edit`);
             }
           }}
           style={{ cursor: 'pointer' }}
         >
-          <div className="me-3" style={{ width: '200px', height: '120px' }}>
+          <div className="me-0 me-sm-3 mb-2 mb-sm-0" style={{ width: '100%', maxWidth: '200px', height: '120px' }}>
             <img
               src={game.image}
               alt={game.name}
@@ -250,16 +246,16 @@ function GameList({ searchTerm, platformFilter }) {
               }}
             />
           </div>
-          <div className="flex-grow-1">
-            <h5 className="mb-1 text-primary fw-bold">{game.name}</h5>
+          <div className="flex-grow-1 text-center text-sm-start">
+            <h5 className="h6 mb-1 text-primary fw-bold">{game.name}</h5>
             <small className="text-muted">
               <i className="bi bi-controller me-1"></i>
-              Plataformas: {formatPlatforms(game.platform)}
+              {formatPlatforms(game.platform)}
             </small>
           </div>
-          <div className="ms-3 d-flex align-items-center">
+          <div className="ms-0 ms-sm-3 mt-2 mt-sm-0">
             <Button
-              className="btn-delete"
+              className="btn-delete btn-sm"
               onClick={(e) => {
                 e.stopPropagation();
                 handleDelete(game._id);
@@ -275,9 +271,9 @@ function GameList({ searchTerm, platformFilter }) {
   );
 
   return (
-    <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="mb-0 text-primary fw-bold" style={{ fontSize: '2.2rem' }}>
+    <div className="container-fluid px-3">
+      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
+        <h1 className="h3 mb-3 mb-sm-0 text-primary fw-bold">
           <i className="bi bi-controller me-2"></i>
           Lista de Juegos
         </h1>
@@ -285,17 +281,22 @@ function GameList({ searchTerm, platformFilter }) {
           <Button
             variant={viewMode === 'grid' ? 'primary' : 'outline-primary'}
             onClick={() => setViewMode('grid')}
+            size="sm"
           >
-            <i className="bi bi-grid-3x3-gap"></i> Cuadrícula
+            <i className="bi bi-grid-3x3-gap"></i>
+            <span className="d-none d-sm-inline ms-1">Cuadrícula</span>
           </Button>
           <Button
             variant={viewMode === 'list' ? 'primary' : 'outline-primary'}
             onClick={() => setViewMode('list')}
+            size="sm"
           >
-            <i className="bi bi-list-ul"></i> Lista
+            <i className="bi bi-list-ul"></i>
+            <span className="d-none d-sm-inline ms-1">Lista</span>
           </Button>
         </div>
       </div>
+
       {filteredGames.length === 0 && (searchTerm || platformFilter) ? (
         <div className="alert alert-info">
           No se encontraron juegos con los criterios de búsqueda seleccionados
@@ -304,12 +305,10 @@ function GameList({ searchTerm, platformFilter }) {
         <>
           {viewMode === 'grid' ? renderGridView() : renderListView()}
           {renderPagination()}
-          <div className="text-center mt-2 text-muted">
-            <small>
-              Mostrando {getCurrentPageItems().length} de {filteredGames.length} juegos
-              {searchTerm && ` que coinciden con "${searchTerm}"`}
-              {platformFilter && ` en la plataforma ${platformFilter}`}
-            </small>
+          <div className="text-center mt-2 text-muted small">
+            Mostrando {getCurrentPageItems().length} de {filteredGames.length} juegos
+            {searchTerm && ` que coinciden con "${searchTerm}"`}
+            {platformFilter && ` en la plataforma ${platformFilter}`}
           </div>
         </>
       )}
