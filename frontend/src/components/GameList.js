@@ -82,7 +82,8 @@ function GameList({ searchTerm, platformFilter }) {
                 style={{ 
                   objectFit: 'contain',
                   objectPosition: 'center',
-                  backgroundColor: '#f8f9fa'
+                  backgroundColor: '#f8f9fa',
+                  padding: '10px'
                 }} 
               />
             </div>
@@ -119,7 +120,7 @@ function GameList({ searchTerm, platformFilter }) {
     <ListGroup>
       {filteredGames.map((game) => (
         <ListGroup.Item key={game._id} className="d-flex align-items-center">
-          <div className="me-3" style={{ width: '150px', height: '100px' }}>
+          <div className="me-3" style={{ width: '200px', height: '120px' }}>
             <img
               src={game.image}
               alt={game.name}
@@ -127,7 +128,8 @@ function GameList({ searchTerm, platformFilter }) {
                 width: '100%',
                 height: '100%',
                 objectFit: 'contain',
-                backgroundColor: '#f8f9fa'
+                backgroundColor: '#f8f9fa',
+                padding: '10px'
               }}
             />
           </div>

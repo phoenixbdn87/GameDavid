@@ -26,7 +26,7 @@ function App() {
           onSearch={handleSearch} 
           onPlatformFilter={handlePlatformFilter} 
         />
-        <Container className="mt-4">
+        <Container fluid="xxl" className="mt-4">
           <Routes>
             <Route 
               path="/" 

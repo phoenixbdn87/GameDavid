@@ -101,7 +101,10 @@ function GameForm() {
   return (
     <Card className="p-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="mb-0">{id ? 'Editar Juego' : 'Agregar Nuevo Juego'}</h2>
+        <h2 className="mb-0 text-primary fw-bold" style={{ fontSize: '2.2rem' }}>
+          <i className="bi bi-controller me-2"></i>
+          {id ? 'Editar Juego' : 'Nuevo Juego'}
+        </h2>
         <Button
           variant="outline-secondary"
           onClick={() => navigate('/')}
