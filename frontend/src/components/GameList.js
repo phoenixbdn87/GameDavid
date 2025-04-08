@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Card, Row, Col, Button, ListGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Card, Row, Col, Button, ListGroup, Pagination, Form } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function GameList({ searchTerm, platformFilter }) {
   const [games, setGames] = useState([]);
   const [filteredGames, setFilteredGames] = useState([]);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' o 'list'
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [totalPages, setTotalPages] = useState(1);
+  const navigate = useNavigate();
 
   const filterGames = useCallback(() => {
     let filtered = games;
@@ -35,7 +39,9 @@ function GameList({ searchTerm, platformFilter }) {
     filtered.sort((a, b) => a.name.localeCompare(b.name));
 
     setFilteredGames(filtered);
-  }, [games, searchTerm, platformFilter]);
+    setTotalPages(Math.ceil(filtered.length / itemsPerPage));
+    setCurrentPage(1);
+  }, [games, searchTerm, platformFilter, itemsPerPage]);
 
   useEffect(() => {
     filterGames();
@@ -70,11 +76,113 @@ function GameList({ searchTerm, platformFilter }) {
     return platform;
   };
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1);
+  };
+
+  const getCurrentPageItems = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredGames.slice(startIndex, endIndex);
+  };
+
+  const renderPagination = () => {
+    const items = [];
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    if (startPage > 1) {
+      items.push(
+        <Pagination.Item key={1} onClick={() => handlePageChange(1)}>
+          1
+        </Pagination.Item>
+      );
+      if (startPage > 2) {
+        items.push(<Pagination.Ellipsis key="start-ellipsis" />);
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      items.push(
+        <Pagination.Item
+          key={i}
+          active={i === currentPage}
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </Pagination.Item>
+      );
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        items.push(<Pagination.Ellipsis key="end-ellipsis" />);
+      }
+      items.push(
+        <Pagination.Item
+          key={totalPages}
+          onClick={() => handlePageChange(totalPages)}
+        >
+          {totalPages}
+        </Pagination.Item>
+      );
+    }
+
+    return (
+      <div className="d-flex justify-content-between align-items-center mt-4">
+        <div className="d-flex align-items-center gap-2">
+          <span>Mostrar:</span>
+          <Form.Select
+            value={itemsPerPage}
+            onChange={handleItemsPerPageChange}
+            style={{ width: '80px' }}
+          >
+            <option value={12}>12</option>
+            <option value={24}>24</option>
+            <option value={50}>50</option>
+          </Form.Select>
+          <span>juegos por página</span>
+        </div>
+        <Pagination className="mb-0">
+          <Pagination.Prev
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          />
+          {items}
+          <Pagination.Next
+            disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+          />
+        </Pagination>
+      </div>
+    );
+  };
+
   const renderGridView = () => (
     <Row xs={1} sm={2} md={3} lg={4} className="g-4">
-      {filteredGames.map((game) => (
+      {getCurrentPageItems().map((game) => (
         <Col key={game._id}>
-          <Card className="h-100">
+          <Card 
+            className="h-100 game-card"
+            onClick={(e) => {
+              // Evitar la navegación si se hace click en los botones
+              if (!e.target.closest('.btn-edit, .btn-delete')) {
+                navigate(`/games/${game._id}/edit`);
+              }
+            }}
+            style={{ cursor: 'pointer' }}
+          >
             <div className="ratio ratio-16x9">
               <Card.Img 
                 variant="top" 
@@ -83,30 +191,28 @@ function GameList({ searchTerm, platformFilter }) {
                   objectFit: 'contain',
                   objectPosition: 'center',
                   backgroundColor: '#f8f9fa',
-                  padding: '10px'
+                  padding: '10px',
+                  transition: 'transform 0.3s ease-in-out'
                 }} 
               />
             </div>
             <Card.Body className="d-flex flex-column">
-              <Card.Title>{game.name}</Card.Title>
+              <Card.Title className="text-primary fw-bold">{game.name}</Card.Title>
               <Card.Text>
                 <small className="text-muted">
+                  <i className="bi bi-controller me-1"></i>
                   Plataformas: {formatPlatforms(game.platform)}
                 </small>
               </Card.Text>
-              <div className="mt-auto d-flex justify-content-between">
-                <Button
-                  className="btn-edit"
-                  as={Link}
-                  to={`/games/${game._id}/edit`}
-                >
-                  <i className="bi bi-pencil-square"></i> Editar
-                </Button>
+              <div className="mt-auto d-flex justify-content-end">
                 <Button
                   className="btn-delete"
-                  onClick={() => handleDelete(game._id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(game._id);
+                  }}
                 >
-                  <i className="bi bi-trash"></i> Eliminar
+                  <i className="bi bi-trash"></i>
                 </Button>
               </div>
             </Card.Body>
@@ -118,8 +224,18 @@ function GameList({ searchTerm, platformFilter }) {
 
   const renderListView = () => (
     <ListGroup>
-      {filteredGames.map((game) => (
-        <ListGroup.Item key={game._id} className="d-flex align-items-center">
+      {getCurrentPageItems().map((game) => (
+        <ListGroup.Item 
+          key={game._id} 
+          className="d-flex align-items-center game-list-item"
+          onClick={(e) => {
+            // Evitar la navegación si se hace click en los botones
+            if (!e.target.closest('.btn-edit, .btn-delete')) {
+              navigate(`/games/${game._id}/edit`);
+            }
+          }}
+          style={{ cursor: 'pointer' }}
+        >
           <div className="me-3" style={{ width: '200px', height: '120px' }}>
             <img
               src={game.image}
@@ -129,28 +245,25 @@ function GameList({ searchTerm, platformFilter }) {
                 height: '100%',
                 objectFit: 'contain',
                 backgroundColor: '#f8f9fa',
-                padding: '10px'
+                padding: '10px',
+                transition: 'transform 0.3s ease-in-out'
               }}
             />
           </div>
           <div className="flex-grow-1">
-            <h5 className="mb-1">{game.name}</h5>
+            <h5 className="mb-1 text-primary fw-bold">{game.name}</h5>
             <small className="text-muted">
+              <i className="bi bi-controller me-1"></i>
               Plataformas: {formatPlatforms(game.platform)}
             </small>
           </div>
           <div className="ms-3 d-flex align-items-center">
             <Button
-              className="btn-edit me-2"
-              as={Link}
-              to={`/games/${game._id}/edit`}
-              title="Editar"
-            >
-              <i className="bi bi-pencil-square"></i>
-            </Button>
-            <Button
               className="btn-delete"
-              onClick={() => handleDelete(game._id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(game._id);
+              }}
               title="Eliminar"
             >
               <i className="bi bi-trash"></i>
@@ -188,7 +301,17 @@ function GameList({ searchTerm, platformFilter }) {
           No se encontraron juegos con los criterios de búsqueda seleccionados
         </div>
       ) : (
-        viewMode === 'grid' ? renderGridView() : renderListView()
+        <>
+          {viewMode === 'grid' ? renderGridView() : renderListView()}
+          {renderPagination()}
+          <div className="text-center mt-2 text-muted">
+            <small>
+              Mostrando {getCurrentPageItems().length} de {filteredGames.length} juegos
+              {searchTerm && ` que coinciden con "${searchTerm}"`}
+              {platformFilter && ` en la plataforma ${platformFilter}`}
+            </small>
+          </div>
+        </>
       )}
     </div>
   );
