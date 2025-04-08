@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Navbar as BootstrapNavbar, Nav, Container, Button, Form } from 'react-bootstrap';
+import { Navbar as BootstrapNavbar, Nav, Container, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import logo from '../assets/logo.png';
 
 const platformOptions = [
   { value: '', label: 'Todas' },
