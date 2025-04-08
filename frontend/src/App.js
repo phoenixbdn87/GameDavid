@@ -15,12 +15,16 @@ function App() {
     setSearchTerm(term);
   };
 
+  const handlePlatformFilter = (platform) => {
+    setPlatformFilter(platform);
+  };
+
   return (
     <Router>
       <div className="App">
         <Navbar 
           onSearch={handleSearch} 
-          onPlatformFilter={setPlatformFilter} 
+          onPlatformFilter={handlePlatformFilter} 
         />
         <Container className="mt-4">
           <Routes>
@@ -28,8 +32,8 @@ function App() {
               path="/" 
               element={
                 <GameList 
-                  searchTerm={searchTerm} 
-                  platformFilter={platformFilter} 
+                  searchTerm={searchTerm}
+                  platformFilter={platformFilter}
                 />
               } 
             />

@@ -100,10 +100,20 @@ function GameForm() {
 
   return (
     <Card className="p-4">
-      <h2 className="mb-4">{id ? 'Editar Juego' : 'Agregar Nuevo Juego'}</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="mb-0">{id ? 'Editar Juego' : 'Agregar Nuevo Juego'}</h2>
+        <Button
+          variant="outline-secondary"
+          onClick={() => navigate('/')}
+          className="d-flex align-items-center gap-2"
+        >
+          <i className="bi bi-arrow-left"></i>
+          Volver
+        </Button>
+      </div>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Nombre del Juego</Form.Label>
+          <Form.Label>Nombre</Form.Label>
           <Form.Control
             type="text"
             name="name"
@@ -130,7 +140,7 @@ function GameForm() {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>URL de la Imagen</Form.Label>
+          <Form.Label>URL de carátula</Form.Label>
           <Form.Control
             type="url"
             name="image"
@@ -143,7 +153,7 @@ function GameForm() {
         {game.image && (
           <div className="mb-3">
             <Form.Label>Vista Previa</Form.Label>
-            <div className="ratio ratio-16x9">
+            <div className="ratio ratio-16x9" style={{ maxWidth: '300px' }}>
               <img
                 src={game.image}
                 alt="Vista previa"

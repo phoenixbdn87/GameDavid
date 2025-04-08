@@ -162,7 +162,10 @@ function GameList({ searchTerm, platformFilter }) {
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="mb-0">Lista de Videojuegos</h1>
+        <h1 className="mb-0 text-primary fw-bold" style={{ fontSize: '2.2rem' }}>
+          <i className="bi bi-controller me-2"></i>
+          Lista de Juegos
+        </h1>
         <div className="btn-group">
           <Button
             variant={viewMode === 'grid' ? 'primary' : 'outline-primary'}
