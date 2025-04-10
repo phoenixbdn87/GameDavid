@@ -107,7 +107,7 @@ function GameForm() {
         </h2>
         <Button
           variant="outline-secondary"
-          onClick={() => navigate('/')}
+          onClick={() => navigate(-1)}
           className="d-flex align-items-center gap-2"
         >
           <i className="bi bi-arrow-left"></i>
