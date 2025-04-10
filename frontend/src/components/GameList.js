@@ -1,16 +1,33 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, Row, Col, Button, ListGroup, Pagination, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 function GameList({ searchTerm, platformFilter }) {
   const [games, setGames] = useState([]);
   const [filteredGames, setFilteredGames] = useState([]);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' o 'list'
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() => {
+    const savedPage = localStorage.getItem('currentPage');
+    return savedPage ? parseInt(savedPage) : 1;
+  });
   const [itemsPerPage, setItemsPerPage] = useState(12);
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Guardar la página actual en localStorage cuando cambia
+  useEffect(() => {
+    localStorage.setItem('currentPage', currentPage.toString());
+  }, [currentPage]);
+
+  // Restaurar la página desde el estado de la ubicación
+  useEffect(() => {
+    const savedPage = location.state?.page;
+    if (savedPage) {
+      setCurrentPage(savedPage);
+    }
+  }, [location.state]);
 
   const filterGames = useCallback(() => {
     let filtered = games;
@@ -40,7 +57,7 @@ function GameList({ searchTerm, platformFilter }) {
 
     setFilteredGames(filtered);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-    setCurrentPage(1);
+    // No reiniciamos la página actual aquí
   }, [games, searchTerm, platformFilter, itemsPerPage]);
 
   useEffect(() => {
@@ -79,6 +96,10 @@ function GameList({ searchTerm, platformFilter }) {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCardClick = (gameId) => {
+    navigate(`/games/${gameId}/edit`, { state: { page: currentPage } });
   };
 
   const handleItemsPerPageChange = (e) => {
@@ -177,7 +198,13 @@ function GameList({ searchTerm, platformFilter }) {
             className="h-100 game-card"
             onClick={(e) => {
               if (!e.target.closest('.btn-delete')) {
-                navigate(`/games/${game._id}/edit`);
+                handleCardClick(game._id);
+              }
+            }}
+            onMouseDown={(e) => {
+              if (e.button === 1 && !e.target.closest('.btn-delete')) {
+                e.preventDefault();
+                window.open(`/games/${game._id}/edit`, '_blank');
               }
             }}
             style={{ cursor: 'pointer' }}
@@ -227,7 +254,13 @@ function GameList({ searchTerm, platformFilter }) {
           className="d-flex flex-column flex-sm-row align-items-center game-list-item p-2"
           onClick={(e) => {
             if (!e.target.closest('.btn-delete')) {
-              navigate(`/games/${game._id}/edit`);
+              handleCardClick(game._id);
+            }
+          }}
+          onMouseDown={(e) => {
+            if (e.button === 1 && !e.target.closest('.btn-delete')) {
+              e.preventDefault();
+              window.open(`/games/${game._id}/edit`, '_blank');
             }
           }}
           style={{ cursor: 'pointer' }}
