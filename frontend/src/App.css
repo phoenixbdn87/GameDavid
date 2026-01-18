@@ -12,25 +12,91 @@
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-color);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-  padding: 0.75rem 1rem;
+  padding: 0.3rem 1rem;
+  min-height: auto;
 }
 
 .navbar .navbar-brand {
-  color: var(--text-primary) !important;
-  font-weight: 700;
-  font-size: 1.4rem;
-  text-shadow: var(--glow-cyan);
   transition: var(--transition-smooth);
 }
 
 .navbar .navbar-brand:hover {
-  color: var(--accent-cyan) !important;
-  text-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+  transform: scale(1.03);
 }
 
-.navbar .navbar-brand i {
-  color: var(--accent-cyan);
-  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.6));
+.navbar-logo {
+  height: 70px;
+  width: auto;
+  min-width: 180px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+  transition: var(--transition-smooth);
+}
+
+.navbar-logo:hover {
+  filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.8));
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .navbar-logo {
+    height: 50px;
+    min-width: 120px;
+  }
+}
+
+/* Botón Añadir Juego */
+.btn-add-game {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  border: none;
+  border-radius: 25px;
+  color: var(--bg-primary) !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-add-game::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.btn-add-game:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow:
+    0 6px 25px rgba(0, 212, 255, 0.5),
+    0 0 40px rgba(168, 85, 247, 0.3);
+  color: var(--bg-primary) !important;
+}
+
+.btn-add-game:hover::before {
+  left: 100%;
+}
+
+.btn-add-game i {
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
 .navbar .nav-link {
@@ -287,34 +353,44 @@
   top: 0.5rem;
   right: 0.5rem;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: scale(0.8) rotate(-10deg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 6;
 }
 
 .game-card:hover .card-delete-overlay {
   opacity: 1;
+  transform: scale(1) rotate(0deg);
 }
 
 .btn-delete-floating {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 51, 102, 0.9) !important;
-  border: none !important;
-  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 51, 102, 0.9), rgba(200, 30, 80, 0.9)) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px;
   color: white !important;
-  font-size: 0.85rem;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
 }
 
 .btn-delete-floating:hover {
-  background: var(--accent-red) !important;
-  transform: scale(1.15);
-  box-shadow: var(--glow-red);
+  background: linear-gradient(135deg, #ff3366, #ff1a4d) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  transform: scale(1.15) rotate(8deg);
+  box-shadow:
+    0 0 20px rgba(255, 51, 102, 0.6),
+    0 8px 25px rgba(255, 51, 102, 0.4);
+}
+
+.btn-delete-floating:active {
+  transform: scale(0.95);
 }
 
 /* Page Title */
@@ -560,6 +636,16 @@
   border-color: var(--border-color) !important;
   color: var(--text-muted) !important;
   opacity: 0.5;
+}
+
+/* Pagination text labels */
+.pagination-controls {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.pagination-controls span {
+  color: var(--text-secondary);
 }
 
 /* ===== Form Controls ===== */

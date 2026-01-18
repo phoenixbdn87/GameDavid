@@ -1,10 +1,10 @@
 /* ===== CSS Variables - Gaming Dark Theme ===== */
 :root {
   /* Background colors */
-  --bg-primary: #0a0a0f;
-  --bg-card: #12121a;
-  --bg-hover: #242430;
-  --bg-input: #1a1a24;
+  --bg-primary: #1a1a2e;
+  --bg-card: #16213e;
+  --bg-hover: #1f2b47;
+  --bg-input: #1a1a2e;
 
   /* Accent colors */
   --accent-cyan: #00d4ff;

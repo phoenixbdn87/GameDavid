@@ -23,8 +23,8 @@ const uploadRoutes = require('./routes/upload');
 app.use('/api/games', gameRoutes);
 app.use('/api/upload', uploadRoutes);
 
-// Solo escucha en modo desarrollo (no en Vercel)
-if (process.env.NODE_ENV !== 'production') {
+// Escucha en local (Vercel usa serverless, no necesita listen)
+if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en puerto ${PORT}`);
   });

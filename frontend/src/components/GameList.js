@@ -161,7 +161,7 @@ function GameList({ searchTerm, platformFilter }) {
     }
 
     return (
-      <div className="d-flex justify-content-between align-items-center mt-4">
+      <div className="d-flex justify-content-between align-items-center mt-4 pagination-controls">
         <div className="d-flex align-items-center gap-2">
           <span>Mostrar:</span>
           <Form.Select
@@ -202,10 +202,14 @@ function GameList({ searchTerm, platformFilter }) {
                 handleCardClick(game._id);
               }
             }}
-            onMouseDown={(e) => {
+            onAuxClick={(e) => {
               if (e.button === 1 && !e.target.closest('.btn-delete')) {
                 e.preventDefault();
-                window.open(`/games/${game._id}/edit`, '_blank');
+                const newWindow = window.open(`/games/${game._id}/edit`, '_blank');
+                if (newWindow) {
+                  newWindow.blur();
+                  window.focus();
+                }
               }
             }}
             style={{ cursor: 'pointer' }}
@@ -252,10 +256,14 @@ function GameList({ searchTerm, platformFilter }) {
               handleCardClick(game._id);
             }
           }}
-          onMouseDown={(e) => {
+          onAuxClick={(e) => {
             if (e.button === 1 && !e.target.closest('.btn-delete')) {
               e.preventDefault();
-              window.open(`/games/${game._id}/edit`, '_blank');
+              const newWindow = window.open(`/games/${game._id}/edit`, '_blank');
+              if (newWindow) {
+                newWindow.blur();
+                window.focus();
+              }
             }
           }}
           style={{ cursor: 'pointer' }}
@@ -327,7 +335,7 @@ function GameList({ searchTerm, platformFilter }) {
           {viewMode === 'grid' ? renderGridView() : renderListView()}
           {renderPagination()}
           <div className="text-center mt-2 text-muted small">
-            Mostrando {getCurrentPageItems().length} de {filteredGames.length} juegos
+            Mostrando {Math.min(currentPage * itemsPerPage, filteredGames.length) - ((currentPage - 1) * itemsPerPage)} de {filteredGames.length} juegos
             {searchTerm && ` que coinciden con "${searchTerm}"`}
             {platformFilter && ` en la plataforma ${platformFilter}`}
           </div>

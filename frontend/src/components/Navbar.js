@@ -30,43 +30,42 @@ function Navbar({ onSearch, onPlatformFilter }) {
     <BootstrapNavbar variant="dark" expand="lg" className="px-3">
       <Container fluid>
         <BootstrapNavbar.Brand as={Link} to="/" className="d-flex align-items-center">
-          <i className="bi bi-controller me-2"></i>
-          <span className="d-none d-sm-inline">Game Collection</span>
+          <img
+            src="/logo_header.png"
+            alt="Game Collection"
+            className="navbar-logo"
+          />
         </BootstrapNavbar.Brand>
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link as={Link} to="/" className="d-flex align-items-center">
-              <i className="bi bi-house-door me-1"></i>
-              <span className="d-none d-sm-inline">Inicio</span>
-            </Nav.Link>
-            <Nav.Link as={Link} to="/games/new" className="d-flex align-items-center">
-              <i className="bi bi-plus-circle me-1"></i>
-              <span className="d-none d-sm-inline">Nuevo Juego</span>
-            </Nav.Link>
-          </Nav>
-          <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Buscar..."
-              className="me-2"
-              value={searchTerm}
-              onChange={handleSearch}
-              style={{ minWidth: '120px' }}
-            />
-            <Form.Select
-              value={selectedPlatform}
-              onChange={handlePlatformChange}
-              style={{ minWidth: '120px' }}
-            >
-              <option value="">Todas las plataformas</option>
-              {platformOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </Form.Select>
-          </Form>
+          <Nav className="me-auto"></Nav>
+          <div className="d-flex align-items-center gap-3">
+            <Link to="/games/new" className="btn-add-game">
+              <i className="bi bi-plus-lg"></i>
+              <span className="d-none d-md-inline">Añadir Juego</span>
+            </Link>
+            <Form className="d-flex gap-2">
+              <Form.Control
+                type="search"
+                placeholder="Buscar..."
+                value={searchTerm}
+                onChange={handleSearch}
+                style={{ minWidth: '120px' }}
+              />
+              <Form.Select
+                value={selectedPlatform}
+                onChange={handlePlatformChange}
+                style={{ minWidth: '120px' }}
+              >
+                <option value="">Todas las plataformas</option>
+                {platformOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form>
+          </div>
         </BootstrapNavbar.Collapse>
       </Container>
     </BootstrapNavbar>
