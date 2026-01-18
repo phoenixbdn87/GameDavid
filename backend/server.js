@@ -23,6 +23,12 @@ const uploadRoutes = require('./routes/upload');
 app.use('/api/games', gameRoutes);
 app.use('/api/upload', uploadRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-}); 
+// Solo escucha en modo desarrollo (no en Vercel)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en puerto ${PORT}`);
+  });
+}
+
+// Exportar para Vercel Serverless
+module.exports = app; 

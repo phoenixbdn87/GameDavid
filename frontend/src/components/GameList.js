@@ -11,7 +11,7 @@ function GameList({ searchTerm, platformFilter }) {
     const savedPage = localStorage.getItem('currentPage');
     return savedPage ? parseInt(savedPage) : 1;
   });
-  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [itemsPerPage, setItemsPerPage] = useState(24);
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
   const location = useLocation();
@@ -169,9 +169,10 @@ function GameList({ searchTerm, platformFilter }) {
             onChange={handleItemsPerPageChange}
             style={{ width: '80px' }}
           >
-            <option value={12}>12</option>
             <option value={24}>24</option>
-            <option value={50}>50</option>
+            <option value={48}>48</option>
+            <option value={72}>72</option>
+            <option value={100}>100</option>
           </Form.Select>
           <span>juegos por página</span>
         </div>
@@ -191,11 +192,11 @@ function GameList({ searchTerm, platformFilter }) {
   };
 
   const renderGridView = () => (
-    <Row xs={1} sm={2} md={3} lg={4} className="g-3">
+    <Row xs={2} sm={3} md={4} lg={5} xl={6} className="g-2">
       {getCurrentPageItems().map((game) => (
         <Col key={game._id}>
-          <Card 
-            className="h-100 game-card"
+          <Card
+            className="h-100 game-card game-card-compact"
             onClick={(e) => {
               if (!e.target.closest('.btn-delete')) {
                 handleCardClick(game._id);
@@ -209,36 +210,30 @@ function GameList({ searchTerm, platformFilter }) {
             }}
             style={{ cursor: 'pointer' }}
           >
-            <div className="ratio ratio-16x9">
-              <Card.Img 
-                variant="top" 
-                src={game.image} 
-                style={{ 
-                  objectFit: 'contain',
-                  objectPosition: 'center',
-                  backgroundColor: '#f8f9fa',
-                  padding: '10px',
-                  transition: 'transform 0.3s ease-in-out'
-                }} 
+            <div className="card-img-wrapper">
+              <Card.Img
+                variant="top"
+                src={game.image}
+                className="game-card-img"
               />
-            </div>
-            <Card.Body className="d-flex flex-column p-2 p-sm-3">
-              <Card.Title className="h6 text-primary fw-bold mb-1">{game.name}</Card.Title>
-              <Card.Text className="small text-muted mb-2">
-                <i className="bi bi-controller me-1"></i>
-                {formatPlatforms(game.platform)}
-              </Card.Text>
-              <div className="mt-auto d-flex justify-content-end">
+              <div className="card-img-overlay-gradient"></div>
+              <div className="card-delete-overlay">
                 <Button
-                  className="btn-delete btn-sm"
+                  className="btn-delete-floating"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDelete(game._id);
                   }}
                 >
-                  <i className="bi bi-trash"></i>
+                  <i className="bi bi-trash-fill"></i>
                 </Button>
               </div>
+            </div>
+            <Card.Body className="card-body-dark card-body-compact">
+              <Card.Title className="game-title-compact">{game.name}</Card.Title>
+              <Card.Text className="game-platform-compact">
+                {formatPlatforms(game.platform)}
+              </Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -265,23 +260,16 @@ function GameList({ searchTerm, platformFilter }) {
           }}
           style={{ cursor: 'pointer' }}
         >
-          <div className="me-0 me-sm-3 mb-2 mb-sm-0" style={{ width: '100%', maxWidth: '200px', height: '120px' }}>
+          <div className="list-img-wrapper me-0 me-sm-3 mb-2 mb-sm-0">
             <img
               src={game.image}
               alt={game.name}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain',
-                backgroundColor: '#f8f9fa',
-                padding: '10px',
-                transition: 'transform 0.3s ease-in-out'
-              }}
+              className="list-game-img"
             />
           </div>
           <div className="flex-grow-1 text-center text-sm-start">
-            <h5 className="h6 mb-1 text-primary fw-bold">{game.name}</h5>
-            <small className="text-muted">
+            <h5 className="h6 mb-1 fw-bold game-title">{game.name}</h5>
+            <small className="game-platform">
               <i className="bi bi-controller me-1"></i>
               {formatPlatforms(game.platform)}
             </small>
@@ -306,7 +294,7 @@ function GameList({ searchTerm, platformFilter }) {
   return (
     <div className="container-fluid px-3">
       <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center mb-4">
-        <h1 className="h3 mb-3 mb-sm-0 text-primary fw-bold">
+        <h1 className="h3 mb-3 mb-sm-0 fw-bold page-title">
           <i className="bi bi-controller me-2"></i>
           Lista de Juegos
         </h1>

@@ -27,7 +27,7 @@ function Navbar({ onSearch, onPlatformFilter }) {
   };
 
   return (
-    <BootstrapNavbar bg="primary" variant="dark" expand="lg" className="px-3">
+    <BootstrapNavbar variant="dark" expand="lg" className="px-3">
       <Container fluid>
         <BootstrapNavbar.Brand as={Link} to="/" className="d-flex align-items-center">
           <i className="bi bi-controller me-2"></i>

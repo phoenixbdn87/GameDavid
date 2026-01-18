@@ -73,27 +73,93 @@ function GameForm() {
   };
 
   const customStyles = {
-    control: (provided) => ({
+    control: (provided, state) => ({
       ...provided,
-      borderColor: '#ced4da',
+      backgroundColor: '#1a1a24',
+      borderColor: state.isFocused ? '#00d4ff' : 'rgba(255, 255, 255, 0.1)',
+      boxShadow: state.isFocused ? '0 0 0 3px rgba(0, 212, 255, 0.2)' : 'none',
+      borderRadius: '8px',
       '&:hover': {
-        borderColor: '#80bdff',
+        borderColor: '#00d4ff',
+      },
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: '#12121a',
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      borderRadius: '8px',
+      boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5)',
+    }),
+    menuList: (provided) => ({
+      ...provided,
+      padding: '4px',
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected
+        ? 'linear-gradient(135deg, #00d4ff, #a855f7)'
+        : state.isFocused
+          ? '#242430'
+          : 'transparent',
+      background: state.isSelected
+        ? 'linear-gradient(135deg, #00d4ff, #a855f7)'
+        : state.isFocused
+          ? '#242430'
+          : 'transparent',
+      color: state.isSelected ? '#0a0a0f' : '#ffffff',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      '&:active': {
+        backgroundColor: '#242430',
       },
     }),
     multiValue: (provided) => ({
       ...provided,
-      backgroundColor: '#e9ecef',
+      backgroundColor: '#242430',
+      borderRadius: '4px',
+      border: '1px solid rgba(0, 212, 255, 0.3)',
     }),
     multiValueLabel: (provided) => ({
       ...provided,
-      color: '#495057',
+      color: '#ffffff',
+      fontWeight: 500,
     }),
     multiValueRemove: (provided) => ({
       ...provided,
-      color: '#6c757d',
+      color: '#b0b0c0',
       '&:hover': {
-        backgroundColor: '#dc3545',
-        color: 'white',
+        backgroundColor: '#ff3366',
+        color: '#ffffff',
+      },
+    }),
+    placeholder: (provided) => ({
+      ...provided,
+      color: '#6b6b7b',
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: '#ffffff',
+    }),
+    input: (provided) => ({
+      ...provided,
+      color: '#ffffff',
+    }),
+    indicatorSeparator: (provided) => ({
+      ...provided,
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    }),
+    dropdownIndicator: (provided) => ({
+      ...provided,
+      color: '#b0b0c0',
+      '&:hover': {
+        color: '#00d4ff',
+      },
+    }),
+    clearIndicator: (provided) => ({
+      ...provided,
+      color: '#b0b0c0',
+      '&:hover': {
+        color: '#ff3366',
       },
     }),
   };
@@ -101,7 +167,7 @@ function GameForm() {
   return (
     <Card className="p-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="mb-0 text-primary fw-bold" style={{ fontSize: '2.2rem' }}>
+        <h2 className="mb-0 fw-bold" style={{ fontSize: '2.2rem' }}>
           <i className="bi bi-controller me-2"></i>
           {id ? 'Editar Juego' : 'Nuevo Juego'}
         </h2>
@@ -154,18 +220,51 @@ function GameForm() {
         </Form.Group>
 
         {game.image && (
-          <div className="mb-3">
-            <Form.Label>Vista Previa</Form.Label>
-            <div className="ratio ratio-16x9" style={{ maxWidth: '300px' }}>
-              <img
-                src={game.image}
-                alt="Vista previa"
-                style={{
-                  objectFit: 'contain',
-                  objectPosition: 'center',
-                  backgroundColor: '#f8f9fa'
-                }}
-              />
+          <div className="mb-4">
+            <Form.Label className="d-flex align-items-center gap-2 mb-3">
+              <i className="bi bi-image" style={{ color: '#00d4ff' }}></i>
+              Vista Previa de Carátula
+            </Form.Label>
+            <div className="preview-container">
+              <div className="preview-card">
+                <div className="preview-img-wrapper">
+                  <img
+                    src={game.image}
+                    alt="Vista previa"
+                    className="preview-img"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                    onLoad={(e) => {
+                      e.target.style.display = 'block';
+                      if (e.target.nextSibling) e.target.nextSibling.style.display = 'none';
+                    }}
+                  />
+                  <div className="preview-error">
+                    <i className="bi bi-exclamation-triangle"></i>
+                    <span>Error al cargar imagen</span>
+                  </div>
+                  <div className="preview-overlay">
+                    <div className="preview-badge">
+                      <i className="bi bi-check-circle-fill me-1"></i>
+                      Preview
+                    </div>
+                  </div>
+                  <div className="preview-shine"></div>
+                </div>
+                {game.name && (
+                  <div className="preview-info">
+                    <span className="preview-title">{game.name}</span>
+                    {game.platform.length > 0 && (
+                      <span className="preview-platforms">
+                        <i className="bi bi-controller me-1"></i>
+                        {game.platform.join(' / ')}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}

@@ -1,186 +1,911 @@
-body {
-  background-color: #ffffff;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-  color: #333;
-}
-
+/* ===== App Container ===== */
 .App {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--bg-primary);
 }
 
-.card {
-  background-color: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.card-title {
-  color: #333;
-  font-weight: 600;
-}
-
-.card-text {
-  color: #666;
-}
-
+/* ===== Navbar Styles ===== */
 .navbar {
-  background-color: #000000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(180deg, rgba(18, 18, 26, 0.98) 0%, rgba(10, 10, 15, 0.95) 100%) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  padding: 0.75rem 1rem;
 }
 
 .navbar .navbar-brand {
-  color: #ffffff;
-  font-weight: bold;
+  color: var(--text-primary) !important;
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-shadow: var(--glow-cyan);
+  transition: var(--transition-smooth);
+}
+
+.navbar .navbar-brand:hover {
+  color: var(--accent-cyan) !important;
+  text-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+}
+
+.navbar .navbar-brand i {
+  color: var(--accent-cyan);
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.6));
 }
 
 .navbar .nav-link {
-  color: #ffffff;
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  transition: var(--transition-smooth);
+  position: relative;
 }
 
 .navbar .nav-link:hover {
-  color: #cccccc;
+  color: var(--accent-cyan) !important;
 }
 
-.form-control {
-  border: 1px solid #ced4da;
+.navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-accent);
+  transition: var(--transition-smooth);
+  transform: translateX(-50%);
 }
 
-.form-control:focus {
-  border-color: #80bdff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+.navbar .nav-link:hover::after {
+  width: 80%;
 }
 
-.alert {
-  border: 1px solid transparent;
+/* Navbar Form Controls */
+.navbar .form-control,
+.navbar .form-select {
+  background-color: var(--bg-input) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  transition: var(--transition-smooth);
 }
 
-/* Estilos para la vista en lista */
-.list-group-item {
-  transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  margin-bottom: 8px;
-  border-radius: 4px;
+.navbar .form-control::placeholder {
+  color: var(--text-muted);
 }
 
-.list-group-item:hover {
-  transform: translateX(5px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.navbar .form-control:focus,
+.navbar .form-select:focus {
+  border-color: var(--accent-cyan) !important;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2) !important;
+  outline: none;
 }
 
-/* Estilos para los botones en modo listado */
-.list-group-item .btn-edit,
-.list-group-item .btn-delete {
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 1.1rem;
+.navbar .form-select option {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
 }
 
-.list-group-item .btn-edit:hover,
-.list-group-item .btn-delete:hover {
-  transform: scale(1.1);
+/* Navbar Toggler */
+.navbar-toggler {
+  border-color: var(--border-color) !important;
 }
 
-/* Estilos para los botones */
-.btn-edit {
-  background-color: #4CAF50;
-  border-color: #4CAF50;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
+.navbar-toggler-icon {
+  filter: invert(1);
 }
 
-.btn-edit:hover {
-  background-color: #45a049;
-  border-color: #45a049;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
-}
-
-.btn-delete {
-  background-color: #f44336;
-  border-color: #f44336;
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-}
-
-.btn-delete:hover {
-  background-color: #da190b;
-  border-color: #da190b;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
-}
-
-/* Estilos para las tarjetas de juegos */
+/* ===== Game Cards (Grid View) ===== */
+.card,
 .game-card {
-  transition: all 0.3s ease-in-out;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 16px !important;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+/* Gradient border on hover */
+.game-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-cyan));
+  background-size: 200% 200%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .game-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  border-color: #0d6efd;
+  transform: translateY(-12px) scale(1.03);
+  box-shadow:
+    0 0 30px rgba(0, 212, 255, 0.4),
+    0 0 60px rgba(168, 85, 247, 0.2),
+    0 25px 50px rgba(0, 0, 0, 0.5) !important;
+  border-color: transparent !important;
 }
 
-.game-card:hover .card-img {
-  transform: scale(1.05);
+.game-card:hover::before {
+  opacity: 1;
+  animation: borderGlow 2s linear infinite;
 }
 
-.game-card .card-title {
-  transition: color 0.3s ease-in-out;
+@keyframes borderGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.game-card:hover .card-title {
-  color: #0d6efd !important;
+/* Card Image Wrapper */
+.card-img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
 
-/* Estilos para la vista en lista */
+.game-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.game-card:hover .game-card-img {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+}
+
+/* Gradient overlay on image */
+.card-img-overlay-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(18, 18, 26, 1) 0%, rgba(18, 18, 26, 0) 100%);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Shine effect on hover */
+.game-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.6s ease;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.game-card:hover::after {
+  left: 150%;
+}
+
+/* Card Body */
+.card-body-dark {
+  background-color: var(--bg-card) !important;
+  position: relative;
+  z-index: 2;
+}
+
+.card .card-body {
+  background-color: var(--bg-card);
+  padding: 1rem;
+}
+
+/* Game Title */
+.game-title {
+  color: var(--text-primary) !important;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-shadow: none;
+}
+
+.game-card:hover .game-title {
+  color: var(--accent-cyan) !important;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+/* Game Platform */
+.game-platform {
+  color: var(--text-secondary) !important;
+  transition: color 0.3s ease;
+}
+
+.game-card:hover .game-platform {
+  color: var(--accent-purple) !important;
+}
+
+/* ===== Compact Card Styles ===== */
+.game-card-compact {
+  border-radius: 12px !important;
+}
+
+.game-card-compact .card-img-wrapper {
+  aspect-ratio: 3 / 4;
+}
+
+.game-card-compact:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+
+.card-body-compact {
+  padding: 0.6rem 0.75rem !important;
+}
+
+.game-title-compact {
+  font-size: 0.8rem !important;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+
+.game-card:hover .game-title-compact {
+  color: var(--accent-cyan) !important;
+}
+
+.game-platform-compact {
+  font-size: 0.65rem !important;
+  color: var(--text-muted) !important;
+  margin-bottom: 0 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.game-card:hover .game-platform-compact {
+  color: var(--accent-purple) !important;
+}
+
+/* Floating Delete Button */
+.card-delete-overlay {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 6;
+}
+
+.game-card:hover .card-delete-overlay {
+  opacity: 1;
+}
+
+.btn-delete-floating {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 51, 102, 0.9) !important;
+  border: none !important;
+  border-radius: 50%;
+  color: white !important;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.btn-delete-floating:hover {
+  background: var(--accent-red) !important;
+  transform: scale(1.15);
+  box-shadow: var(--glow-red);
+}
+
+/* Page Title */
+.page-title {
+  color: var(--text-primary);
+  text-shadow: var(--glow-cyan);
+}
+
+.page-title i {
+  color: var(--accent-cyan);
+  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.6));
+}
+
+/* Legacy card styles */
+.card-title {
+  color: var(--text-primary) !important;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+}
+
+.card:hover .card-title {
+  color: var(--accent-cyan) !important;
+}
+
+.card-text {
+  color: var(--text-secondary) !important;
+}
+
+/* ===== List View Items ===== */
+.list-group-item,
 .game-list-item {
-  transition: all 0.3s ease-in-out;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  margin-bottom: 8px;
-  border-radius: 4px;
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+  margin-bottom: 12px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
+.list-group-item::before,
+.game-list-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--gradient-accent);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.list-group-item:hover,
 .game-list-item:hover {
-  transform: translateX(5px) scale(1.01);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-color: #0d6efd;
+  background-color: var(--bg-hover) !important;
+  transform: translateX(8px) scale(1.01);
+  box-shadow:
+    0 0 25px rgba(168, 85, 247, 0.3),
+    0 10px 30px rgba(0, 0, 0, 0.4) !important;
+  border-color: var(--accent-purple) !important;
 }
 
-.game-list-item:hover img {
-  transform: scale(1.05);
+.list-group-item:hover::before,
+.game-list-item:hover::before {
+  opacity: 1;
+  width: 5px;
 }
 
-.game-list-item:hover h5 {
-  color: #0d6efd !important;
+/* List View Image Wrapper */
+.list-img-wrapper {
+  width: 100%;
+  max-width: 140px;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
 
-/* Estilos para los botones en modo listado */
+.list-game-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.game-list-item:hover .list-game-img {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+}
+
+.list-group-item h5,
+.game-list-item h5,
+.game-list-item .game-title {
+  color: var(--text-primary) !important;
+  transition: all 0.3s ease;
+}
+
+.list-group-item:hover h5,
+.game-list-item:hover h5,
+.game-list-item:hover .game-title {
+  color: var(--accent-cyan) !important;
+  text-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+}
+
+.game-list-item .game-platform {
+  color: var(--text-secondary) !important;
+  transition: color 0.3s ease;
+}
+
+.game-list-item:hover .game-platform {
+  color: var(--accent-purple) !important;
+}
+
+/* ===== Action Buttons ===== */
+.btn-edit {
+  background: transparent !important;
+  border: 2px solid var(--accent-green) !important;
+  color: var(--accent-green) !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+  font-weight: 500;
+}
+
+.btn-edit:hover {
+  background: var(--accent-green) !important;
+  color: var(--bg-primary) !important;
+  box-shadow: var(--glow-green);
+  transform: translateY(-2px);
+}
+
+.btn-delete {
+  background: transparent !important;
+  border: 2px solid var(--accent-red) !important;
+  color: var(--accent-red) !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+  font-weight: 500;
+}
+
+.btn-delete:hover {
+  background: var(--accent-red) !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--glow-red);
+  transform: translateY(-2px);
+}
+
+/* List view button adjustments */
+.list-group-item .btn-edit,
+.list-group-item .btn-delete,
 .game-list-item .btn-edit,
 .game-list-item .btn-delete {
-  transition: all 0.3s ease-in-out;
-  opacity: 0.8;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  opacity: 0.85;
 }
 
+.list-group-item:hover .btn-edit,
+.list-group-item:hover .btn-delete,
 .game-list-item:hover .btn-edit,
 .game-list-item:hover .btn-delete {
   opacity: 1;
-  transform: scale(1.1);
-} 
+}
+
+/* ===== Primary Button ===== */
+.btn-primary {
+  background: var(--gradient-accent) !important;
+  border: none !important;
+  color: var(--bg-primary) !important;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  transition: var(--transition-smooth);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+/* ===== Secondary/Outline Buttons ===== */
+.btn-outline-secondary {
+  border-color: var(--text-secondary) !important;
+  color: var(--text-secondary) !important;
+  transition: var(--transition-smooth);
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--bg-hover) !important;
+  border-color: var(--accent-cyan) !important;
+  color: var(--accent-cyan) !important;
+}
+
+/* ===== View Toggle Buttons ===== */
+.btn-group .btn-outline-secondary {
+  border-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+
+.btn-group .btn-outline-secondary:hover,
+.btn-group .btn-outline-secondary.active {
+  background-color: var(--accent-cyan) !important;
+  border-color: var(--accent-cyan) !important;
+  color: var(--bg-primary) !important;
+}
+
+/* ===== Pagination ===== */
+.pagination {
+  gap: 4px;
+}
+
+.page-item .page-link {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-secondary) !important;
+  transition: var(--transition-smooth);
+  border-radius: 6px !important;
+  margin: 0 2px;
+}
+
+.page-item .page-link:hover {
+  background-color: var(--bg-hover) !important;
+  border-color: var(--accent-cyan) !important;
+  color: var(--accent-cyan) !important;
+}
+
+.page-item.active .page-link {
+  background: var(--gradient-accent) !important;
+  border-color: var(--accent-cyan) !important;
+  color: var(--bg-primary) !important;
+  font-weight: 600;
+  box-shadow: var(--glow-cyan);
+}
+
+.page-item.disabled .page-link {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-muted) !important;
+  opacity: 0.5;
+}
+
+/* ===== Form Controls ===== */
+.form-control,
+.form-select {
+  background-color: var(--bg-input) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  transition: var(--transition-smooth);
+  border-radius: 8px;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--accent-cyan) !important;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2) !important;
+  outline: none;
+  background-color: var(--bg-hover) !important;
+}
+
+.form-select option {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.form-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* ===== Form Card (GameForm) ===== */
+.card.p-4 {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 16px !important;
+}
+
+.card.p-4 h2 {
+  color: var(--accent-cyan) !important;
+  text-shadow: var(--glow-cyan);
+}
+
+.card.p-4 h2 i {
+  color: var(--accent-purple);
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
+}
+
+/* ===== Image Preview (GameForm) ===== */
+.preview-container {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+  border-radius: 16px;
+  border: 1px dashed rgba(0, 212, 255, 0.3);
+}
+
+.preview-card {
+  width: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-card);
+  box-shadow:
+    0 0 30px rgba(0, 212, 255, 0.2),
+    0 20px 40px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.preview-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-cyan));
+  background-size: 200% 200%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: borderGlow 3s linear infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.preview-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 0 50px rgba(0, 212, 255, 0.4),
+    0 0 80px rgba(168, 85, 247, 0.2),
+    0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+.preview-img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.preview-card:hover .preview-img {
+  transform: scale(1.08);
+  filter: brightness(1.1);
+}
+
+.preview-error {
+  display: none;
+  position: absolute;
+  inset: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--accent-red);
+  background: var(--bg-card);
+}
+
+.preview-error i {
+  font-size: 2rem;
+}
+
+.preview-error span {
+  font-size: 0.85rem;
+}
+
+.preview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0.75rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.preview-badge {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+  color: var(--bg-primary);
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 212, 255, 0.4);
+}
+
+.preview-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  animation: previewShine 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes previewShine {
+  0% { left: -100%; }
+  50% { left: 150%; }
+  100% { left: 150%; }
+}
+
+.preview-info {
+  padding: 1rem;
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.preview-title {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+
+.preview-card:hover .preview-title {
+  color: var(--accent-cyan);
+}
+
+.preview-platforms {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.preview-platforms i {
+  color: var(--accent-purple);
+}
+
+/* Legacy ratio container */
+.ratio {
+  background-color: var(--bg-hover) !important;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* ===== Alerts ===== */
+.alert {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border-radius: 8px;
+}
+
+.alert-danger {
+  border-color: var(--accent-red) !important;
+  background-color: rgba(255, 51, 102, 0.1) !important;
+}
+
+.alert-success {
+  border-color: var(--accent-green) !important;
+  background-color: rgba(0, 255, 136, 0.1) !important;
+}
+
+/* ===== Badges ===== */
+.badge {
+  font-weight: 500;
+  padding: 0.4em 0.8em;
+}
+
+.badge.bg-secondary {
+  background-color: var(--bg-hover) !important;
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--border-color);
+}
+
+.badge.bg-primary {
+  background: var(--gradient-accent) !important;
+  color: var(--bg-primary) !important;
+}
+
+/* ===== Empty State / No Results ===== */
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+/* ===== Container padding for main content ===== */
+.container,
+.container-fluid {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+/* ===== Card Image Overlay for better text readability ===== */
+.card .card-img-top {
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+
+/* ===== Responsive adjustments ===== */
+@media (max-width: 768px) {
+  .navbar .navbar-brand {
+    font-size: 1.2rem;
+  }
+
+  .card:hover,
+  .game-card:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+
+  .list-group-item:hover,
+  .game-list-item:hover {
+    transform: translateX(4px);
+  }
+}
+
+/* ===== Bootstrap dark mode overrides ===== */
+.bg-light {
+  background-color: var(--bg-card) !important;
+}
+
+.bg-dark {
+  background-color: var(--bg-primary) !important;
+}
+
+.text-dark {
+  color: var(--text-primary) !important;
+}
+
+.border {
+  border-color: var(--border-color) !important;
+}
+
+/* ===== Dropdown menus ===== */
+.dropdown-menu {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-item {
+  color: var(--text-secondary) !important;
+  transition: var(--transition-smooth);
+}
+
+.dropdown-item:hover {
+  background-color: var(--bg-hover) !important;
+  color: var(--accent-cyan) !important;
+}
+
+/* ===== Modal (if used) ===== */
+.modal-content {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.modal-header {
+  border-bottom-color: var(--border-color) !important;
+}
+
+.modal-footer {
+  border-top-color: var(--border-color) !important;
+}
+
+/* ===== Loading spinner override ===== */
+.spinner-border {
+  color: var(--accent-cyan) !important;
+}
