@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Navbar as BootstrapNavbar, Nav, Container, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const platformOptions = [
   { value: '', label: 'Todas' },
@@ -13,6 +14,7 @@ const platformOptions = [
 function Navbar({ onSearch, onPlatformFilter }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState('');
+  const { logout, user } = useAuth();
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -65,6 +67,13 @@ function Navbar({ onSearch, onPlatformFilter }) {
                 ))}
               </Form.Select>
             </Form>
+            <button
+              className="btn-logout"
+              onClick={logout}
+              title={`Cerrar sesion (${user?.username})`}
+            >
+              <i className="bi bi-box-arrow-right"></i>
+            </button>
           </div>
         </BootstrapNavbar.Collapse>
       </Container>

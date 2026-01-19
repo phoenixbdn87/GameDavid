@@ -3,13 +3,16 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import LoginModal from './components/LoginModal';
 import Navbar from './components/Navbar';
 import GameList from './components/GameList';
 import GameForm from './components/GameForm';
 
-function App() {
+function AppContent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [platformFilter, setPlatformFilter] = useState('');
+  const { isAuthenticated, loading } = useAuth();
 
   const handleSearch = (term) => {
     setSearchTerm(term);
@@ -19,31 +22,59 @@ function App() {
     setPlatformFilter(platform);
   };
 
-  return (
-    <Router>
+  // Mostrar pantalla de carga mientras se verifica la autenticación
+  if (loading) {
+    return (
       <div className="App">
-        <Navbar 
-          onSearch={handleSearch} 
-          onPlatformFilter={handlePlatformFilter} 
-        />
-        <Container fluid="xxl" className="mt-4">
-          <Routes>
-            <Route 
-              path="/" 
-              element={
-                <GameList 
-                  searchTerm={searchTerm}
-                  platformFilter={platformFilter}
-                />
-              } 
-            />
-            <Route path="/games/new" element={<GameForm />} />
-            <Route path="/games/:id/edit" element={<GameForm />} />
-          </Routes>
-        </Container>
+        <div className="login-overlay">
+          <div className="spinner" style={{ width: 50, height: 50 }}></div>
+        </div>
       </div>
-    </Router>
+    );
+  }
+
+  // Mostrar modal de login si no está autenticado
+  if (!isAuthenticated) {
+    return (
+      <div className="App">
+        <LoginModal />
+      </div>
+    );
+  }
+
+  return (
+    <div className="App">
+      <Navbar
+        onSearch={handleSearch}
+        onPlatformFilter={handlePlatformFilter}
+      />
+      <Container fluid="xxl" className="mt-4">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <GameList
+                searchTerm={searchTerm}
+                platformFilter={platformFilter}
+              />
+            }
+          />
+          <Route path="/games/new" element={<GameForm />} />
+          <Route path="/games/:id/edit" element={<GameForm />} />
+        </Routes>
+      </Container>
+    </div>
   );
 }
 
-export default App; 
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
