@@ -21,9 +21,11 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/game-coll
 const gameRoutes = require('./routes/games');
 const uploadRoutes = require('./routes/upload');
 const authRoutes = require('./routes/auth');
+const exportRoutes = require('./routes/export');
 app.use('/api/games', gameRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/export', exportRoutes);
 
 // Escucha en local (Vercel usa serverless, no necesita listen)
 if (!process.env.VERCEL) {

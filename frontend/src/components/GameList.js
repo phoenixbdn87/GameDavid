@@ -107,6 +107,10 @@ function GameList({ searchTerm, platformFilter }) {
     setCurrentPage(1);
   };
 
+  const handleExport = () => {
+    window.open(`${process.env.REACT_APP_API_URL}/api/export/excel`, '_blank');
+  };
+
   const getCurrentPageItems = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -176,6 +180,14 @@ function GameList({ searchTerm, platformFilter }) {
           </Form.Select>
           <span>juegos por página</span>
         </div>
+        <button
+          className="btn-export-excel"
+          onClick={handleExport}
+          title="Exportar catálogo a Excel"
+        >
+          <i className="bi bi-file-earmark-spreadsheet"></i>
+          <span></span>
+        </button>
         <Pagination className="mb-0">
           <Pagination.Prev
             disabled={currentPage === 1}
@@ -248,9 +260,9 @@ function GameList({ searchTerm, platformFilter }) {
   const renderListView = () => (
     <ListGroup>
       {getCurrentPageItems().map((game) => (
-        <ListGroup.Item 
-          key={game._id} 
-          className="d-flex flex-column flex-sm-row align-items-center game-list-item p-2"
+        <ListGroup.Item
+          key={game._id}
+          className="game-list-item"
           onClick={(e) => {
             if (!e.target.closest('.btn-delete')) {
               handleCardClick(game._id);
@@ -268,31 +280,33 @@ function GameList({ searchTerm, platformFilter }) {
           }}
           style={{ cursor: 'pointer' }}
         >
-          <div className="list-img-wrapper me-0 me-sm-3 mb-2 mb-sm-0">
-            <img
-              src={game.image}
-              alt={game.name}
-              className="list-game-img"
-            />
-          </div>
-          <div className="flex-grow-1 text-center text-sm-start">
-            <h5 className="h6 mb-1 fw-bold game-title">{game.name}</h5>
-            <small className="game-platform">
-              <i className="bi bi-controller me-1"></i>
-              {formatPlatforms(game.platform)}
-            </small>
-          </div>
-          <div className="ms-0 ms-sm-3 mt-2 mt-sm-0">
-            <Button
-              className="btn-delete btn-sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDelete(game._id);
-              }}
-              title="Eliminar"
-            >
-              <i className="bi bi-trash"></i>
-            </Button>
+          <div className="list-item-content">
+            <div className="list-img-wrapper">
+              <img
+                src={game.image}
+                alt={game.name}
+                className="list-game-img"
+              />
+            </div>
+            <div className="list-item-info">
+              <h5 className="game-title">{game.name}</h5>
+              <small className="game-platform">
+                <i className="bi bi-controller me-1"></i>
+                {formatPlatforms(game.platform)}
+              </small>
+            </div>
+            <div className="list-item-actions">
+              <Button
+                className="btn-delete btn-sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(game._id);
+                }}
+                title="Eliminar"
+              >
+                <i className="bi bi-trash"></i>
+              </Button>
+            </div>
           </div>
         </ListGroup.Item>
       ))}

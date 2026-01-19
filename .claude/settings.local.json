@@ -9,7 +9,8 @@
       "Bash(ping:*)",
       "Bash(npm run build:*)",
       "Bash(set CI=true:*)",
-      "Bash(npx react-scripts build)"
+      "Bash(npx react-scripts build)",
+      "Bash(npm install:*)"
     ]
   }
 }
