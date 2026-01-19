@@ -42,7 +42,7 @@ function Navbar({ onSearch, onPlatformFilter }) {
           <div className="d-flex align-items-center gap-3">
             <Link to="/games/new" className="btn-add-game">
               <i className="bi bi-plus-lg"></i>
-              <span className="d-none d-md-inline">Añadir Juego</span>
+              <span>Añadir Juego</span>
             </Link>
             <Form className="d-flex gap-2">
               <Form.Control
@@ -57,7 +57,7 @@ function Navbar({ onSearch, onPlatformFilter }) {
                 onChange={handlePlatformChange}
                 style={{ minWidth: '120px' }}
               >
-                <option value="">Todas las plataformas</option>
+                <option value="">Plataforma</option>
                 {platformOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
