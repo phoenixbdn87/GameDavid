@@ -11,9 +11,10 @@ const platformOptions = [
   { value: 'Steam', label: 'Steam' }
 ];
 
-function Navbar({ onSearch, onPlatformFilter }) {
+function Navbar({ onSearch, onPlatformFilter, onFuturibleFilter }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState('');
+  const [futuribleOnly, setFuturibleOnly] = useState(false);
   const { logout, user } = useAuth();
 
   const handleSearch = (e) => {
@@ -66,6 +67,17 @@ function Navbar({ onSearch, onPlatformFilter }) {
                   </option>
                 ))}
               </Form.Select>
+              <button
+                type="button"
+                className={`btn-futurible-filter${futuribleOnly ? ' active' : ''}`}
+                onClick={() => {
+                  setFuturibleOnly(!futuribleOnly);
+                  onFuturibleFilter(!futuribleOnly);
+                }}
+                title="Filtrar futuribles"
+              >
+                <i className={`bi bi-heart${futuribleOnly ? '-fill' : ''}`}></i>
+              </button>
             </Form>
             <button
               className="btn-logout"

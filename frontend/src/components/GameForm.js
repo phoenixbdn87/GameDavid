@@ -15,7 +15,8 @@ function GameForm() {
   const [game, setGame] = useState({
     name: '',
     platform: [],
-    image: ''
+    image: '',
+    futurible: false
   });
 
   const navigate = useNavigate();
@@ -268,6 +269,17 @@ function GameForm() {
             </div>
           </div>
         )}
+
+        <Form.Group className="mb-3">
+          <Form.Check
+            type="switch"
+            id="futurible-check"
+            label="Futurible"
+            checked={game.futurible}
+            onChange={(e) => setGame(prev => ({ ...prev, futurible: e.target.checked }))}
+            className="futurible-switch"
+          />
+        </Form.Group>
 
         <Button variant="primary" type="submit">
           {id ? 'Actualizar' : 'Agregar'}

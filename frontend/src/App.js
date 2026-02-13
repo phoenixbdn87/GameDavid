@@ -12,6 +12,7 @@ import GameForm from './components/GameForm';
 function AppContent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [platformFilter, setPlatformFilter] = useState('');
+  const [futuribleFilter, setFuturibleFilter] = useState(false);
   const { isAuthenticated, loading } = useAuth();
 
   const handleSearch = (term) => {
@@ -20,6 +21,10 @@ function AppContent() {
 
   const handlePlatformFilter = (platform) => {
     setPlatformFilter(platform);
+  };
+
+  const handleFuturibleFilter = (value) => {
+    setFuturibleFilter(value);
   };
 
   // Mostrar pantalla de carga mientras se verifica la autenticación
@@ -47,6 +52,7 @@ function AppContent() {
       <Navbar
         onSearch={handleSearch}
         onPlatformFilter={handlePlatformFilter}
+        onFuturibleFilter={handleFuturibleFilter}
       />
       <Container fluid="xxl" className="mt-4">
         <Routes>
@@ -56,6 +62,7 @@ function AppContent() {
               <GameList
                 searchTerm={searchTerm}
                 platformFilter={platformFilter}
+                futuribleFilter={futuribleFilter}
               />
             }
           />

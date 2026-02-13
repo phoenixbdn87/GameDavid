@@ -3,7 +3,7 @@ import { Card, Row, Col, Button, ListGroup, Pagination, Form } from 'react-boots
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
-function GameList({ searchTerm, platformFilter }) {
+function GameList({ searchTerm, platformFilter, futuribleFilter }) {
   const [games, setGames] = useState([]);
   const [filteredGames, setFilteredGames] = useState([]);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' o 'list'
@@ -52,13 +52,24 @@ function GameList({ searchTerm, platformFilter }) {
       });
     }
 
+    // Por defecto ocultar futuribles, mostrar solo si el filtro está activo
+    if (futuribleFilter) {
+      filtered = filtered.filter(game => game.futurible === true);
+    } else {
+      filtered = filtered.filter(game => !game.futurible);
+    }
+
     // Ordenar alfabéticamente por nombre
     filtered.sort((a, b) => a.name.localeCompare(b.name));
 
     setFilteredGames(filtered);
     setTotalPages(Math.ceil(filtered.length / itemsPerPage));
-    // No reiniciamos la página actual aquí
-  }, [games, searchTerm, platformFilter, itemsPerPage]);
+  }, [games, searchTerm, platformFilter, futuribleFilter, itemsPerPage]);
+
+  // Resetear a página 1 cuando cambian los filtros
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, platformFilter, futuribleFilter]);
 
   useEffect(() => {
     filterGames();
@@ -250,6 +261,11 @@ function GameList({ searchTerm, platformFilter }) {
               <Card.Text className="game-platform-compact">
                 {formatPlatforms(game.platform)}
               </Card.Text>
+              {game.futurible && (
+                <span className="futurible-tag">
+                  <i className="bi bi-heart-fill"></i>
+                </span>
+              )}
             </Card.Body>
           </Card>
         </Col>
@@ -294,6 +310,11 @@ function GameList({ searchTerm, platformFilter }) {
                 <i className="bi bi-controller me-1"></i>
                 {formatPlatforms(game.platform)}
               </small>
+              {game.futurible && (
+                <span className="futurible-tag">
+                  <i className="bi bi-heart-fill me-1"></i>Futurible
+                </span>
+              )}
             </div>
             <div className="list-item-actions">
               <Button

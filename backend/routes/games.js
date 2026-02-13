@@ -29,7 +29,8 @@ router.post('/', async (req, res) => {
     name: req.body.name,
     description: req.body.description,
     platform: req.body.platform,
-    image: req.body.image
+    image: req.body.image,
+    futurible: req.body.futurible
   });
 
   try {
@@ -50,6 +51,7 @@ router.put('/:id', async (req, res) => {
     game.description = req.body.description || game.description;
     game.platform = req.body.platform || game.platform;
     game.image = req.body.image || game.image;
+    game.futurible = req.body.futurible !== undefined ? req.body.futurible : game.futurible;
 
     const updatedGame = await game.save();
     res.json(updatedGame);
